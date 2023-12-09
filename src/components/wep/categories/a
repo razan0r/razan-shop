@@ -1,0 +1,15 @@
+      <div className='row'>
+        {data?.categories.length?data?.categories.map((category)=>
+          <div className='col-lg-4' key={category._id}>
+                  <img src={category.image.secure_url} />
+                  <h2>{category.name}</h2>
+          </div>):'no categories found'
+        }
+      </div>
+
+      {data?.categories.length?data?.categories.map((category)=>
+        <SwiperSlide>
+          <img src={category.image.secure_url} className='rounded-circle'/>
+          <h2 className='fs-5'>{category.name}</h2>
+          </SwiperSlide>
+      ):'no categories found'}
