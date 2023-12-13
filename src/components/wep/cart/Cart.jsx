@@ -2,10 +2,11 @@ import React, { useContext } from 'react'
 import './Cart.css'
 import { CartContext } from '../context/Cart'
 import { useQuery } from 'react-query'
+import { Link } from 'react-router-dom'
 
 export default function Cart() {
 
-    const {getCartContext,removeCartContext}=useContext(CartContext)
+    const {getCartContext,removeCartContext,clearCartContext,increaseQuantityContext,decreaseQuantityContext}=useContext(CartContext)
 
     const getCart=async()=>{
         const res=await getCartContext();
@@ -16,6 +17,22 @@ export default function Cart() {
       return res;
     }
 
+    const clearCart=async()=>{
+      const res=await clearCartContext();
+      return res;
+  }
+
+  const increaseQuantity = async (productId) => {
+    const res=await increaseQuantityContext(productId);
+    console.log(res);
+      
+  }
+
+  const decreaseQuantity = async (productId) => {
+    const res=await decreaseQuantityContext(productId);
+    console.log(res);
+      
+  }
 
   const {data,isLoading}= useQuery("cart",getCart)
     console.log(data);
@@ -73,7 +90,7 @@ export default function Cart() {
                 </div>
               </div>
               <div className="quantity">
-                <button>
+                <button onClick={() => decreaseQuantity(product.details._id)}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={16}
@@ -91,7 +108,7 @@ export default function Cart() {
                   </svg>
                 </button>
                 <span>{product.quantity}</span>
-                <button>
+                <button onClick={() => increaseQuantity(product.details._id)}>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width={16}
@@ -147,7 +164,10 @@ export default function Cart() {
                 <span>$1345.00</span>
               </div>
               <div className="checkout">
-                <a href="#">Chekout</a>
+                <Link to='/createOrder'>Chekout</Link>
+              </div>
+              <div className="checkout">
+                <a href="#" onClick={()=>clearCart()}>clear cart</a>
               </div>
             </div>
           </div>

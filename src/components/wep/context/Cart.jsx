@@ -54,7 +54,48 @@ const removeCartContext=async (productId)=>{
     }
 }
 
-    return <CartContext.Provider value={{addToCartContext,getCartContext,removeCartContext}}>
+const clearCartContext = async () => {
+    try {
+        const token=localStorage.getItem("userToken")
+      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/cart/clear`, null, 
+      {headers:{Authorization:`Tariq__${token}`}});
+
+      console.log('Cart cleared successfully', response.data);
+    } catch (error) {
+      console.error('Error clearing the cart', error);
+    }
+  };
+
+  const increaseQuantityContext  = async (productId) => {
+    try {
+    const token=localStorage.getItem("userToken")
+      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/cart/incraseQuantity`, {productId}, {
+        headers: {
+            Authorization:`Tariq__${token}`,
+        },
+      });
+    } catch (error) {
+      console.error('Error increasing quantity', error);
+    }
+  };
+
+
+  const decreaseQuantityContext  = async (productId) => {
+    try {
+    const token=localStorage.getItem("userToken")
+      const response = await axios.patch(`${import.meta.env.VITE_API_URL}/cart/decraseQuantity`, {productId}, {
+        headers: {
+            Authorization:`Tariq__${token}`,
+        },
+      });
+    } catch (error) {
+      console.error('Error increasing quantity', error);
+    }
+  };
+
+
+
+    return <CartContext.Provider value={{addToCartContext,getCartContext,removeCartContext,clearCartContext,increaseQuantityContext,decreaseQuantityContext,}}>
         {children}
     </CartContext.Provider>
 }

@@ -2,8 +2,11 @@ import React, { useContext } from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import { CartContext } from '../context/Cart'
 import { useQuery } from 'react-query'
+import { UserContext } from '../context/User'
 
-export default function Navbar({user,setUser}) {
+export default function Navbar() {
+  let {userToken,setUserToken,userData,setUserData}=useContext(UserContext)
+  let navigate=useNavigate()
   const {getCartContext}=useContext(CartContext)
 
   const getCart=async()=>{
@@ -11,14 +14,16 @@ export default function Navbar({user,setUser}) {
     return res;
 }
   const {data,isLoading}= useQuery("cart",getCart)
-    console.log(data);
-
-  const navigate = useNavigate();  
-    const logout=()=>{
-    localStorage.removeItem('userToken');
-    setUser(null);
-    navigate('/home');
+    
+  const logout=()=>{
+    console.log("logout")
+    localStorage.removeItem("userToken")
+    setUserToken(null)
+    setUserData(null)
+    navigate('/')
   }
+
+
 
   return (
 <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -35,10 +40,10 @@ export default function Navbar({user,setUser}) {
         </li>
 
      
-        {user&&   
+        
          <li className="nav-item">
          <Link className="nav-link" to="profile">Profile</Link>
-       </li>}  
+       </li> 
         <li className="nav-item">
           <a className="nav-link" href="#">Categories</a>
         </li>
@@ -47,11 +52,13 @@ export default function Navbar({user,setUser}) {
         <li className="nav-item">
           <a className="nav-link" href="#">Products</a>
         </li>
-        {user&&   
-         <li className="nav-item">
-          <Link className="nav-link position-relative" to='/cart'>Cart  {data && data.count && <span className="text-danger fw-bold position-absolute top-0 start-100 translate-middle badge rounded-pill">{data.count}</span>}</Link>
          
-        </li>}  
+       {userToken ?(
+           <li className="nav-item">
+          <Link className="nav-link position-relative" to='/cart'>Cart  {data && data.count && <span className="text-danger fw-bold position-absolute top-0 start-100 translate-middle badge rounded-pill">{data.count}</span>}</Link>
+        </li>
+       ):null} 
+       
 
       </ul>
 
@@ -59,22 +66,23 @@ export default function Navbar({user,setUser}) {
    <ul className="navbar-nav">
        <li className="nav-item dropdown">
           <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            Dropdown
+            {userData!=null ? userData.userName : 'Account'}
           </a>
           <ul className="dropdown-menu ">
-            {!user?
-              <>
+          
+          {userToken==null?     <>
             <li><Link className="dropdown-item" to="/register">register</Link></li>
             <li><hr className="dropdown-divider" /></li>
             <li><Link className="dropdown-item" to="/login">login</Link>
             </li>
-              </>:
-              <>
+              </>:   <>
             <li><Link className="dropdown-item" to="/register">profile</Link></li>
             <li><hr className="dropdown-divider" /></li>
             <li><Link className="dropdown-item" onClick={logout}>logout</Link></li>
-              </>
-            }
+              </>}
+         
+           
+            
            
           </ul>
         </li>

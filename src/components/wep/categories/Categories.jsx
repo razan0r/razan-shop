@@ -20,10 +20,8 @@ const getCategories=async()=>{
 }
 
 const x=useContext(CartContext)
-console.log(x);
 
 const {data,isLoading}=useQuery('wep_categories',getCategories)
-  console.log(data?.categories);
  if(isLoading){
   return <h2>loading....</h2>
  }
@@ -45,8 +43,8 @@ const {data,isLoading}=useQuery('wep_categories',getCategories)
         clickable: true ,
         el:'.swiper-custom-pagination'
         }}
-      onSlideChange={() => console.log('slide change')}
-      onSwiper={(swiper) => console.log(swiper)}
+     // onSlideChange={() => }
+     // onSwiper={(swiper) => }
       >
         {data?.categories.length?data?.categories.map((category)=>
         <SwiperSlide>
