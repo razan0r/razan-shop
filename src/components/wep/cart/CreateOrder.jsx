@@ -15,11 +15,6 @@ const CreateOrder = () => {
       const response = await axios.post(
         `${import.meta.env.VITE_API_URL}/order`,
         {
-          couponName,
-          address,
-          phone,
-        },
-        {
           headers: {
             Authorization: `Bearer ${token}`,
           },
